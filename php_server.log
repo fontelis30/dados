@@ -1,0 +1,7 @@
+[Mon Aug 19 11:15:40 2024] Failed to listen on 0.0.0.0:8080 (reason: Address already in[Mon Aug 19 11:16:44 2024] 127.0.0.1:41270 Accepted
+[Mon Aug 19 11:16:44 2024] 127.0.0.1:41270 [200]: GET /
+[Mon Aug 19 11:16:44 2024] 127.0.0.1:41272 Accepted
+[Mon Aug 19 11:16:44 2024] 127.0.0.1:41270 Closing
+[Mon Aug 19 11:17:03 2024] 127.0.0.1:41272 [200]: GET /cpf.php?consulta=63674984350
+[Mon Aug 19 11:17:03 2024] 127.0.0.1:41272 Closing
+[Mon Aug 19 11:17:14 2024] 127.0.0.1:41292 Accepted

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Consultas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 200px;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+        .card h3 {
+            margin: 0;
+            font-size: 18px;
+            color: white;
+        }
+        .card p {
+            margin: 10px 0;
+            color: #ccc;
+        }
+        .card button {
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .card button:hover {
+            background: #0056b3;
+        }
+        .result {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .result h3 {
+            margin: 0;
+            font-size: 18px;
+            color: white;
+        }
+        .result p {
+            margin: 10px 0;
+            color: #ccc;
+        }
+        .result input {
+            width: calc(100% - 60px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .result button {
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .result button:hover {
+            background: #0056b3;
+        }
+        .input-container {
+            position: relative;
+            width: 100%;
+        }
+        #loading {
+            display: none;
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        #consulta-btn, #voltar-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        #consulta-btn img, #voltar-btn img {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body style="background-image: url('https://i.gifer.com/83WF.gif'); background-size: cover;">
+    <div class="container" id="main-panel">
+        <h1>Painel de Consultas</h1>
+        <div class="panel">
+            <div class="card">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/document--v1.png" alt="CPF">
+                <h3>Consultar CPF</h3>
+                <p>Consulta de dados gerais de CPF</p>
+                <button onclick="showConsulta('cpf')">Consultar</button>
+            </div>
+            <div class="card">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/briefcase.png" alt="CNPJ">
+                <h3>Consultar CNPJ</h3>
+                <p>Consulta de dados gerais de CNPJ</p>
+                <button onclick="showConsulta('cnpj')">Consultar</button>
+            </div>
+            <div class="card">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/briefcase.png" alt="CEP">
+                <h3>Consultar CEP</h3>
+                <p>Consulta de dados de CEP</p>
+                <button onclick="showConsulta('cep')">Consultar</button>
+            </div>
+            <div class="card">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/internet.png" alt="IP">
+                <h3>Consultar IP</h3>
+                <p>Consulta de dados de IP</p>
+                <button onclick="showConsulta('ip')">Consultar</button>
+            </div>
+            <div class="card">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/phone.png" alt="Telefone">
+                <h3>Consultar Telefone</h3>
+                <p>Consulta de dados de Telefone</p>
+                <button onclick="showConsulta('telefone')">Consultar</button>
+            </div>
+            <div class="card">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/user.png" alt="Nome">
+                <h3>Consultar Nome</h3>
+                <p>Consulta de dados de Nome</p>
+                <button onclick="showConsulta('nome')">Consultar</button>
+            </div>
+            <div class="card">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/car.png" alt="Placa">
+                <h3>Consultar Placa</h3>
+                <p>Consulta de dados de Placa</p>
+                <button onclick="showConsulta('placa')">Consultar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="consulta-panel" style="display: none;">
+        <h1 id="consulta-titulo">Consulta</h1>
+        <div class="result">
+            <h3 id="consulta-instrucao">Digite os dados para consulta</h3>
+            <div class="input-container">
+                <input type="text" id="consultaInput" placeholder="Digite aqui">
+                <img id="loading" src="https://i.gifer.com/XVo6.gif" alt="Carregando...">
+            </div>
+            <button id="consulta-btn" onclick="consultar()">
+                <img src="https://img.icons8.com/ios-filled/24/ffffff/search.png" alt="Buscar">
+                Consultar
+            </button>
+            <button id="voltar-btn" onclick="voltar()">
+                <img src="https://img.icons8.com/ios-filled/24/ffffff/undo.png" alt="Voltar">
+                Voltar
+            </button>
+        </div>
+        <div id="resultado" class="result" style="display: none;">
+            <h3>Resultado da Consulta</h3>
+            <div id="dados"></div>
+            <button onclick="copiar()">Copiar</button>
+        </div>
+    </div>
+
+    <script>
+        function showConsulta(tipo) {
+            const mainPanel = document.getElementById('main-panel');
+            const consultaPanel = document.getElementById('consulta-panel');
+            const consultaTitulo = document.getElementById('consulta-titulo');
+            const consultaInstrucao = document.getElementById('consulta-instrucao');
+            const consultaInput = document.getElementById('consultaInput');
+            const resultado = document.getElementById('resultado');
+            const dados = document.getElementById('dados');
+            const loading = document.getElementById('loading');
+            const voltarBtn = document.getElementById('voltar-btn');
+
+            mainPanel.style.display = 'none';
+            consultaPanel.style.display = 'block';
+            resultado.style.display = 'none';
+            dados.innerHTML = '';
+            consultaInput.value = '';
+
+            switch (tipo) {
+                case 'cpf':
+                    consultaTitulo.textContent = 'Consulta de CPF';
+                    consultaInstrucao.textContent = 'Digite o CPF para consulta';
+                    consultaInput.placeholder = 'Digite o CPF';
+                    break;
+                case 'cnpj':
+                    consultaTitulo.textContent = 'Consulta de CNPJ';
+                    consultaInstrucao.textContent = 'Digite o CNPJ para consulta';
+                    consultaInput.placeholder = 'Digite o CNPJ';
+                    break;
+                case 'cep':
+                    consultaTitulo.textContent = 'Consulta de CEP';
+                    consultaInstrucao.textContent = 'Digite o CEP para consulta';
+                    consultaInput.placeholder = 'Digite o CEP';
+                    break;
+                case 'ip':
+                    consultaTitulo.textContent = 'Consulta de IP';
+                    consultaInstrucao.textContent = 'Digite o IP para consulta';
+                    consultaInput.placeholder = 'Digite o IP';
+                    break;
+                case 'telefone':
+                    consultaTitulo.textContent = 'Consulta de Telefone';
+                    consultaInstrucao.textContent = 'Digite o Telefone para consulta';
+                    consultaInput.placeholder = 'Digite o Telefone';
+                    break;
+                case 'nome':
+                    consultaTitulo.textContent = 'Consulta de Nome';
+                    consultaInstrucao.textContent = 'Digite o Nome para consulta';
+                    consultaInput.placeholder = 'Digite o Nome';
+                    break;
+                case 'placa':
+                    consultaTitulo.textContent = 'Consulta de Placa';
+                    consultaInstrucao.textContent = 'Digite a Placa para consulta';
+                    consultaInput.placeholder = 'Digite a Placa';
+                    break;
+                default:
+                    consultaTitulo.textContent = 'Consulta';
+                    consultaInstrucao.textContent = 'Digite os dados para consulta';
+            }
+
+            window.tipoConsulta = tipo;
+        }
+
+        async function consultar() {
+            const consultaInput = document.getElementById('consultaInput').value;
+            const loading = document.getElementById('loading');
+            const resultado = document.getElementById('resultado');
+            const dados = document.getElementById('dados');
+            const voltarBtn = document.getElementById('voltar-btn');
+
+            loading.style.display = 'block';
+            voltarBtn.style.display = 'none';
+
+            try {
+                // Use URL relativa em vez de IP fixo
+                const response = await fetch(`./${window.tipoConsulta}.php?consulta=${consultaInput}`, { mode: 'cors' });
+                const textResult = await response.text();
+
+                dados.innerHTML = formatResult(textResult);
+                resultado.style.display = 'block';
+            } catch (error) {
+                dados.innerHTML = `<p>Erro ao realizar a consulta. Detalhes: ${error.message}</p>`;
+                resultado.style.display = 'block';
+            } finally {
+                loading.style.display = 'none';
+                voltarBtn.style.display = 'inline-flex';
+            }
+        }
+
+        function formatResult(result) {
+            return result.replace(/⤬/g, '<br>⤬').replace(/----/g, '<br>----');
+        }
+
+        function voltar() {
+            const mainPanel = document.getElementById('main-panel');
+            const consultaPanel = document.getElementById('consulta-panel');
+            const resultado = document.getElementById('resultado');
+
+            mainPanel.style.display = 'block';
+            consultaPanel.style.display = 'none';
+            resultado.style.display = 'none';
+        }
+
+        function copiar() {
+            const dados = document.getElementById('dados').innerText;
+            navigator.clipboard.writeText(dados).then(() => {
+                alert('Resultado copiado para a área de transferência.');
+            });
+        }
+    </script>
+</body>
+</html>
